@@ -729,6 +729,18 @@ if st.session_state.formatted_text:
                 st.subheader("🎧 生成された音声")
                 st.audio(st.session_state.generated_audio, format="audio/wav")
 
+                # 音声ダウンロードボタンをすぐ下に配置
+                if "filename" not in st.session_state or not st.session_state.filename:
+                    st.session_state.filename = "output"
+
+                st.download_button(
+                    label="📥 AUDIO DOWNLOAD",
+                    data=st.session_state.generated_audio,
+                    file_name=f"{st.session_state.filename}.wav",
+                    mime="audio/wav",
+                    key="download_audio_inline"
+                )
+
     else:
         st.error("⚠️ VOICEVOXに接続できません")
         st.warning("""
@@ -787,36 +799,18 @@ if st.session_state.formatted_text:
         key="filename_input"
     )
 
-    # 2つのダウンロードボタンを横並びに配置
-    col1, col2 = st.columns(2)
+    # テキストダウンロードボタン
+    text_download_data = st.session_state.text_editor
+    if st.session_state.generated_sns_content and st.session_state.get("sns_content_editor"):
+        text_download_data = st.session_state.text_editor + "\n\n" + st.session_state.sns_content_editor
 
-    with col1:
-        # テキストダウンロード（整形済み + タイトル・紹介文・ハッシュタグ）
-        text_download_data = st.session_state.text_editor
-        if st.session_state.generated_sns_content and st.session_state.get("sns_content_editor"):
-            text_download_data = st.session_state.text_editor + "\n\n" + st.session_state.sns_content_editor
-
-        st.download_button(
-            label="TEXT DOWNLOAD",
-            data=text_download_data,
-            file_name=f"{final_filename}.txt",
-            mime="text/plain",
-            key="download_text"
-        )
-
-    with col2:
-        # 音声ファイルをダウンロード（音声生成済みの場合のみ表示）
-        if st.session_state.generated_audio:
-            st.download_button(
-                label="AUDIO DOWNLOAD",
-                data=st.session_state.generated_audio,
-                file_name=f"{final_filename}.wav",
-                mime="audio/wav",
-                key="download_audio"
-            )
-        else:
-            # 音声未生成の場合は何も表示しない（スペースのみ）
-            st.write("")
+    st.download_button(
+        label="📄 TEXT DOWNLOAD",
+        data=text_download_data,
+        file_name=f"{final_filename}.txt",
+        mime="text/plain",
+        key="download_text"
+    )
 
 # フッター
 st.markdown("---")
