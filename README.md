@@ -1,3 +1,14 @@
+---
+title: TikTok Re-Editor VOICEVOX Mobile
+emoji: 🎬
+colorFrom: blue
+colorTo: pink
+sdk: streamlit
+sdk_version: 1.31.0
+app_file: app.py
+pinned: false
+---
+
 # 🎬 TikTok Re-Editor VOICEVOX Mobile
 
 **📱 スマホ・タブレット対応版**
