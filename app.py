@@ -800,9 +800,13 @@ if st.session_state.formatted_text:
     )
 
     # テキストダウンロードボタン
-    text_download_data = st.session_state.text_editor
+    # 本文のみから句読点を削除
+    main_text = st.session_state.text_editor.replace("。", "").replace("、", "")
+
+    text_download_data = main_text
     if st.session_state.generated_sns_content and st.session_state.get("sns_content_editor"):
-        text_download_data = st.session_state.text_editor + "\n\n" + st.session_state.sns_content_editor
+        # タイトル・紹介文・ハッシュタグは句読点を残す
+        text_download_data = main_text + "\n\n" + st.session_state.sns_content_editor
 
     st.download_button(
         label="📄 TEXT DOWNLOAD",
